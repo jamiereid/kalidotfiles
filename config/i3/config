@@ -1,0 +1,219 @@
+#######################################################################
+#                              variables                              #
+#######################################################################
+
+set $mod         Mod4
+set $myres       8
+
+set $bordersize  0 
+
+#######################################################################
+#                           random settings                           #
+#######################################################################
+
+popup_during_fullscreen 	smart
+workspace_layout        	default
+workspace_auto_back_and_forth	yes
+
+#######################################################################
+#                               colors                                #
+#######################################################################
+
+#                        BORDER      BACKGROUND  TEXT    INDICATOR
+client.focused           #6699cc     #6699cc     #2d2d2d #6699cc
+client.focused_inactive  #6699cc     #6699cc     #2d2d2d #6699cc
+client.unfocused         #2d2d2d     #2d2d2d     #747369 #2d2d2d
+client.urgent            #f99157     #f99157     #2d2d2d #f99157
+
+#######################################################################
+#                                font                                 #
+#######################################################################
+
+font                    pango:Noto Mono, FontAwesome 12
+
+#######################################################################
+#                               borders                               #
+#######################################################################
+
+hide_edge_borders       none
+new_float               pixel $bordersize
+new_window              pixel $bordersize
+
+#######################################################################
+#                         launcher & terminal                         #
+#######################################################################
+
+bindsym	$mod+space	exec rofi -show run -font 'Noto Sans 12' 
+bindsym	$mod+Return	exec xfce4-terminal
+
+#######################################################################
+#                             i3 bindings                             #
+#######################################################################
+
+bindsym $mod+Shift+c	reload
+bindsym $mod+Shift+r	restart
+bindsym $mod+Shift+q	kill
+bindsym	$mod+Shift+E    exec "i3-nagbar -t warning -m 'Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+#######################################################################
+#                           focus bindings                            #
+#######################################################################
+
+bindsym	$mod+Left	focus left
+bindsym $mod+Down	focus down
+bindsym $mod+Up		focus up
+bindsym $mod+Right	focus right
+
+bindsym	$mod+Shift+Tab	workspace prev
+bindsym	$mod+Tab	workspace next
+
+#######################################################################
+#                             workspaces                              #
+#######################################################################
+
+set	$ws1   		I
+set	$ws2   		II
+set	$ws3   		III
+set	$ws4   		IV
+set	$ws5   		V
+set	$ws6		VI
+set	$ws7		VII
+set	$ws8		VIII
+set	$ws9		IX
+set	$ws0		X
+
+bindsym	$mod+1		workspace $WS1
+bindsym $mod+2		workspace $WS2
+bindsym $mod+3		workspace $WS3
+bindsym $mod+4		workspace $WS4
+bindsym $mod+5		workspace $WS5
+bindsym $mod+6		workspace $WS6
+bindsym $mod+7		workspace 7
+bindsym $mod+8		workspace 8
+bindsym $mod+9		workspace 9
+bindsym $mod+0		workspace 10 
+
+bindsym	$mod+Shift+1 	move container to workspace $WS1
+bindsym $mod+Shift+2 	move container to workspace $WS2
+bindsym $mod+Shift+3 	move container to workspace $WS3
+bindsym $mod+Shift+4 	move container to workspace $WS4
+bindsym $mod+Shift+5 	move container to workspace $WS5
+bindsym $mod+Shift+6 	move container to workspace $WS6
+bindsym $mod+Shift+7 	move container to workspace 7
+bindsym $mod+Shift+8 	move container to workspace 8
+bindsym $mod+Shift+9 	move container to workspace 9
+bindsym $mod+Shift+0	move container to workspace 10
+
+#######################################################################
+#                          movement bindings                          #
+#######################################################################
+
+bindsym	$mod+Shift+h		move left
+bindsym $mod+Shift+j		move down
+bindsym $mod+Shift+k		move up
+bindsym $mod+Shift+l		move right
+
+bindsym $mod+Shift+Left		move left
+bindsym $mod+Shift+Down		move down
+bindsym $mod+Shift+Up		move up
+bindsym $mod+Shift+Right	move right
+
+#######################################################################
+#                           layout bindings                           #
+#######################################################################
+
+bindsym	$mod+s		layout stacking
+bindsym	$mod+w 		layout tabbed
+bindsym	$mod+e 		layout toggle split
+bindsym	$mod+f 		fullscreen
+
+bindsym	$mod+h 		split h
+bindsym $mod+v 		split v
+
+bindsym	$mod+Shift+s	floating toggle
+floating_modifier       $mod
+
+#bindsym	$mod+Shift+minus	move scratchpad
+#bindsym	$mod+minus		scratchpad show
+
+#######################################################################
+#                           custom bindings                           #
+#######################################################################
+
+bindsym $mod+t          exec i3-input -F 'rename workspace to "%s"' -P 'New name: '
+bindsym $mod+b          border toggle
+bindsym $mod+l		exec $HOME/.config/i3/lock.sh
+bindsym Print		exec scrot '%Y-%m-%d_$wx$h_scrot.png' -e 'mv $f ~/screenshots/' 
+
+#######################################################################
+#                                modes                                #
+#######################################################################
+
+mode "resize" {
+    bindsym             h resize shrink width $myres px or $myres ppt
+    bindsym             j resize grow height $myres px or $myres ppt
+    bindsym             k resize shrink height $myres px or $myres ppt
+    bindsym             l resize grow width $myres px or $myres ppt
+
+    bindsym             Left resize shrink width $myres px or $myres ppt
+    bindsym             Right resize grow width $myres px or $myres ppt
+    bindsym             Down resize grow height $myres px or $myres ppt
+    bindsym             Up resize shrink height $myres px or $myres ppt
+
+    bindsym             Escape mode "default"
+    bindsym             Return mode "default"
+}
+bindsym                 $mod+r mode "resize"
+
+#######################################################################
+#                               startup                               #
+#######################################################################
+
+exec --no-startup-id /usr/bin/compton --config ~/.config/compton.conf
+exec --no-startup-id nm-applet
+exec --no-startup-id feh --bg-fill ~/Pictures/wall2.jpg
+
+#######################################################################
+#                                 bar                                 #
+#######################################################################
+
+bar {
+    status_command i3blocks -c ~/.config/i3/i3blocks.conf
+    position top
+    #tray_output primary
+    font pango:Noto Mono 9
+    separator_symbol "  "
+    workspace_buttons yes
+    strip_workspace_numbers no
+    binding_mode_indicator yes
+#
+    colors {
+#        background $background
+#        statusline $foreground
+#        separator $darkgrey
+#
+#        focused_workspace  $background $background $foreground
+#        active_workspace   $background $background $foreground
+#        inactive_workspace $background $background $darkgrey
+#        urgent_workspace   $background $background $red
+
+        separator #2b5b84
+        background #2d2d2d
+        statusline #268bd2
+        #                  BORDER     BACKGROUND TEXT
+        active_workspace   #6699cc    #6699cc    #2d2d2d
+        focused_workspace  #6699cc    #6699cc    #2d2d2d
+        inactive_workspace #2d2d2d    #2d2d2d    #747369
+        urgent_workspace   #f99157    #f99157    #e8e6df
+    }
+}
+
+#######################################################################
+#                         window assignments                          #
+#######################################################################
+
+
+#######################################################################
+#               specific window settings (use xprop)                  #
+#######################################################################
+
