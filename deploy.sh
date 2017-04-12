@@ -15,3 +15,9 @@ ln -sfn $DIR/tmux.conf ~/.tmux.conf
 ln -sfn $DIR/gitconfig ~/.gitconfig
 echo '*** Copying images...'
 cp $DIR/images/wall*.jpg ~/Pictures/
+echo '*** Copying fonts...'
+FONTDIR="$HOME/.local/share/fonts"
+mkdir -p $FONTDIR
+cp "$DIR/fonts/DejaVu Sans Mono for Powerline.ttf" $FONTDIR
+echo '*** Resetting font cache...'
+fc-cache -f $FONTDIR
